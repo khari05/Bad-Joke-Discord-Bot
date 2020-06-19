@@ -2,8 +2,8 @@ const disc = require("discord.js")
 const client = new disc.Client()
 
 const token = process.env.token
-const channelId = process.env.channelId
-const botId = process.env.botId
+const channelId = process.env.channelId.toString()
+const botId = process.env.botId.toString()
 
 client.on("ready", () => console.log(`Logged in as ${client.user.tag}`))
 
