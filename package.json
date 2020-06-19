@@ -1,0 +1,19 @@
+{
+  "name": "bad-joke-bot",
+  "version": "1.0.0",
+  "description": "you have sent a terrible joke",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/MrCoderBoy345/bad-joke-discord-bot"
+  },
+  "author": "MrCoderBoy345",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
