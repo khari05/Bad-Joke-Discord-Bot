@@ -1,8 +1,9 @@
 const disc = require("discord.js")
+const fs = require("fs")
 const client = new disc.Client()
 
 const token = process.env.token
-const channelId = process.env.channelId.toString()
+const channels = fs.readFileSync('channels.txt').toString().split("\n")
 const botId = process.env.botId.toString()
 
 client.on("ready", () => {
@@ -11,7 +12,7 @@ client.on("ready", () => {
 })
 
 client.on('message', msg => {
-    if (msg.attachments.size > 0 && msg.channel.id === channelId && msg.author.id !== botId) {
+    if (msg.attachments.size > 0 && channels.indexOf(msg.channel.id) !== -1 && msg.author.id !== botId) {
         msg.channel.send({ 
             files: [{
                 attachment: './bad-joke.png',
