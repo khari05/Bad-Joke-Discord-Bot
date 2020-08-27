@@ -14,7 +14,9 @@
   "author": "MrCoderBoy345",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.2.0",
-    "fs": "0.0.1-security"
+    "discord.js": "^12.2.0"
+  },
+  "devDependencies": {
+    "standard": "^14.3.4"
   }
 }
