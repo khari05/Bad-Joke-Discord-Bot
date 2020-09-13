@@ -2,9 +2,9 @@ const disc = require('discord.js')
 const fs = require('fs')
 const client = new disc.Client()
 
-const token = process.env.token
+const token = process.env.TOKEN
 const channels = fs.readFileSync('channels.txt').toString().split('\n')
-const ownerId = process.env.ownerId.toString()
+const ownerId = process.env.OWNER
 const prefix = '%'
 const msgRegex = new RegExp(`^${prefix}.*`)
 
@@ -14,7 +14,7 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`)
   console.log(`Watching ${client.guilds.cache.size} guilds`)
   try {
-    client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+    updateStatus()
     client.users.fetch(ownerId, true)
     botOwner = client.users.cache.get(ownerId)
   } catch (e) {
@@ -23,7 +23,11 @@ client.on('ready', () => {
 })
 
 client.on('guildCreate', (guild) => {
-  console.log(`Joined guild ${guild.name}`)
+  client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+    .catch(e => console.error(e.stack))
+})
+
+client.on('guildDelete', (guild) => {
   client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
     .catch(e => console.error(e.stack))
 })
@@ -110,3 +114,10 @@ client.on('message', (msg) => {
 })
 
 client.login(token)
+  .catch(e => console.error(e.stack))
+
+const updateStatus = () => {
+  client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+  console.log('updated status')
+  return Promise.resolve().then(() => setTimeout(() => updateStatus(), 604800000))
+}
