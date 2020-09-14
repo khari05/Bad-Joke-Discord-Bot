@@ -92,7 +92,7 @@ client.on('message', (msg) => {
     } catch (e) {
       console.error(e.stack)
     }
-  } else if ((msg.attachments.size > 0 || msg.embeds.length > 0) && channels.indexOf(msg.channel.id) !== -1 && msg.channel.type === 'text' && !msg.author.bot) {
+  } else if ((msg.attachments.size > 0 || msg.embeds.length > 0 || msg.content.length > 75) && channels.indexOf(msg.channel.id) !== -1 && !msg.author.bot) {
     msg.channel.send({
       files: [{
         attachment: './bad-joke.png',
