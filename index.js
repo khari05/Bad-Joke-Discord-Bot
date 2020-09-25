@@ -118,6 +118,5 @@ client.login(token)
 
 const updateStatus = () => {
   client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
-  console.log('updated status')
-  return Promise.resolve().then(() => setTimeout(() => updateStatus(), 604800000))
+  return Promise.resolve().then(() => setTimeout(() => updateStatus(), 432000000))
 }
