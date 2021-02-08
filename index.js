@@ -6,7 +6,7 @@ const token = process.env.TOKEN
 const channels = fs.readFileSync('channels.txt').toString().split('\n')
 const ownerId = process.env.OWNER
 const prefix = '%'
-const msgRegex = new RegExp(`^${prefix}.*`)
+const msgRegex = new RegExp(`^\\${prefix}.*`)
 
 let botOwner
 
@@ -35,7 +35,7 @@ client.on('guildDelete', (guild) => {
 // ! this is almost entirely spaghetti code. doesn't really matter since its just a random side project that nobody will actually use.
 client.on('message', (msg) => {
   // if the message matches the regex, it is a command. otherwise it checks if its a picture in a watched channel or dm.
-  if (msg.content.search(msgRegex) !== -1) {
+  if (msg.content.search(msgRegex) !== -1 && !msg.author.bot) {
     try {
       // checks if its a command in a dm. if its in a dm, it says that a user cannot send commands in a dm.
       if (msg.channel.type !== 'dm') {
@@ -66,6 +66,11 @@ client.on('message', (msg) => {
           msg.channel.send(new disc.MessageEmbed({
             title: 'Bad Joke Help',
             color: 16774557,
+            footer: {
+              text: `Requested by ${msg.author.tag}`,
+              icon_url: msg.author.avatarURL()
+            },
+            timestamp: new Date(),
             fields: [
               {
                 name: `${prefix}help`,
@@ -83,7 +88,7 @@ client.on('message', (msg) => {
           }))
         } else {
           // user didn't run %help and doesn't have permission to run commands
-          msg.channel.send('You do not have permission to run that command.')
+          msg.channel.send('You do not have permission to run commands.')
         }
       } else {
         // a command was run in a dm channel
@@ -118,5 +123,5 @@ client.login(token)
 
 const updateStatus = () => {
   client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
-  return Promise.resolve().then(() => setTimeout(() => updateStatus(), 432000000))
+  setTimeout(() => updateStatus(), 2880000)
 }
