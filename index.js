@@ -4,31 +4,22 @@ const client = new disc.Client()
 
 const token = process.env.TOKEN
 const channels = fs.readFileSync('channels.txt').toString().split('\n')
-const ownerId = process.env.OWNER
 const prefix = '%'
 const msgRegex = new RegExp(`^\\${prefix}.*`)
 
-let botOwner
-
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`)
-  console.log(`Watching ${client.guilds.cache.size} guilds`)
-  try {
-    updateStatus()
-    client.users.fetch(ownerId, true)
-    botOwner = client.users.cache.get(ownerId)
-  } catch (e) {
-    console.error(e.stack)
-  }
+  updateStatus(client)
+    .catch(e => console.error(e.stack))
 })
 
 client.on('guildCreate', (guild) => {
-  client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+  updateStatus(client)
     .catch(e => console.error(e.stack))
 })
 
 client.on('guildDelete', (guild) => {
-  client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+  updateStatus(client)
     .catch(e => console.error(e.stack))
 })
 
@@ -63,32 +54,34 @@ client.on('message', (msg) => {
             msg.channel.send('Unknown command.')
           }
         } else if (msg.content === `${prefix}help`) {
-          msg.channel.send(new disc.MessageEmbed({
-            title: 'Bad Joke Help',
-            color: 16774557,
-            footer: {
-              text: `Requested by ${msg.author.tag}`,
-              icon_url: msg.author.avatarURL()
-            },
-            timestamp: new Date(),
-            fields: [
-              {
-                name: `${prefix}help`,
-                value: 'returns the help page.'
+          msg.channel.send(
+            new disc.MessageEmbed({
+              title: 'Bad Joke Help',
+              color: 16774557,
+              footer: {
+                text: `Requested by ${msg.author.tag}`,
+                icon_url: msg.author.avatarURL()
               },
-              {
-                name: `${prefix}addchannel`,
-                value: 'Makes Bad Joke watch this channel for bad jokes.'
-              },
-              {
-                name: `${prefix}removechannel`,
-                value: 'Makes Bad Joke stop watching this channel for bad jokes.'
-              }
-            ]
-          }))
+              timestamp: new Date(),
+              fields: [
+                {
+                  name: `${prefix}help`,
+                  value: 'returns the help page.'
+                },
+                {
+                  name: `${prefix}addchannel`,
+                  value: 'Makes Bad Joke watch this channel for bad jokes.'
+                },
+                {
+                  name: `${prefix}removechannel`,
+                  value: 'Makes Bad Joke stop watching this channel for bad jokes.'
+                }
+              ]
+            })
+          )
         } else {
           // user didn't run %help and doesn't have permission to run commands
-          msg.channel.send('You do not have permission to run commands.')
+          msg.channel.send('You do not have permission to run that command.')
         }
       } else {
         // a command was run in a dm channel
@@ -105,23 +98,12 @@ client.on('message', (msg) => {
       }]
     })
       .catch(e => console.error(e.stack))
-  } else if (msg.channel.type === 'dm' && !msg.author.bot) {
-    botOwner.send(new disc.MessageEmbed({
-      author: {
-        name: msg.author.tag,
-        icon_url: msg.author.avatarURL()
-      },
-      description: msg.content,
-      image: msg.attachments.size !== 0 ? { url: msg.attachments.array()[0].url } : null
-    }))
-      .catch(e => console.error(e.stack))
   }
 })
 
+async function updateStatus (client) {
+  await client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
+}
+
 client.login(token)
   .catch(e => console.error(e.stack))
-
-const updateStatus = () => {
-  client.user.setActivity(`${client.guilds.cache.size} guilds | ${prefix}help`, { type: 'WATCHING' })
-  setTimeout(() => updateStatus(), 2880000)
-}
