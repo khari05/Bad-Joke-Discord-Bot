@@ -4,19 +4,24 @@
   "description": "you have sent a terrible joke",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "ts-standard",
+    "build": "tsc",
+    "start": "node dist/index",
+    "watch": "tsc --watch && nodemon dist/index"
   },
   "repository": {
     "type": "git",
-    "url": "github.com/MrCoderBoy345/bad-joke-discord-bot"
+    "url": "github.com/khari05/bad-joke-discord-bot"
   },
-  "author": "MrCoderBoy345",
-  "license": "ISC",
+  "author": "khari05",
+  "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "discord.js": "^13.1.0",
+    "typescript": "^4.5.4"
   },
   "devDependencies": {
-    "standard": "^16.0.4"
+    "@types/node": "^18.11.18",
+    "ts-standard": "^12.0.2"
   }
 }
