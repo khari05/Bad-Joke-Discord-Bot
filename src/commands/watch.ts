@@ -39,7 +39,9 @@ async function toggleWatchChannel (
   const channelId = cmd.channelId
   if (watcher.isWatching(channelId)) {
     watcher.removeChannel(channelId)
+    await sendMessage(cmd, 'This channel will no longer be watched for bad jokes.', true)
   } else {
     watcher.addChannel(channelId)
+    await sendMessage(cmd, 'This channel will now be watched for bad jokes.', true)
   }
 }

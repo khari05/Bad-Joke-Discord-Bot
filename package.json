@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "you have sent a terrible joke",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "ts-standard",
+    "build": "tsc",
+    "start": "node dist/index",
+    "watch": "tsc --watch && nodemon dist/index"
   },
   "repository": {
     "type": "git",

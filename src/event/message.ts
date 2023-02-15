@@ -1,11 +1,16 @@
-import { Message } from 'discord.js'
+import { Client, Message } from 'discord.js'
 import { prefix } from '..'
 import { ChannelWatcher } from '../util/ChannelWatcher'
+import { commandMap } from './command'
 
-const msgRegex = new RegExp(`^\\${prefix}.*`)
+export async function manageMessageEvent (msg: Message, client: Client, watcher: ChannelWatcher): Promise<void> {
+  const content = msg.content.trim()
 
-export async function manageMessageEvent (msg: Message, watcher: ChannelWatcher): Promise<void> {
-  console.log(msg.content)
+  if (content.startsWith(prefix)) {
+    const command = commandMap.get(content.slice(1))
+    await command?.execute(msg, client, watcher)
+    return
+  }
 
   if (watcher.isWatching(msg.channel.id) &&
     !msg.author.bot &&

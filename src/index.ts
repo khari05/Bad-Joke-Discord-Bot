@@ -2,7 +2,7 @@ import { updatePresence } from './util/presence'
 import { Client } from 'discord.js'
 import { manageMessageEvent } from './event/message'
 import { ChannelWatcher } from './util/ChannelWatcher'
-import { matchSlashCommand } from './event/command'
+import { matchSlashCommand, setCommands } from './event/command'
 
 const client = new Client({ intents: ['GUILDS', 'GUILD_MESSAGES'] })
 
@@ -12,6 +12,8 @@ const channelWatcher = new ChannelWatcher()
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag ?? 'error'}`)
+  setCommands(client)
+    .catch((e: Error) => console.error(e.stack))
   updatePresence(client, prefix)
 })
 
@@ -24,11 +26,11 @@ client.on('guildDelete', (guild) => {
 })
 
 client.on('messageCreate', (msg) => {
-  manageMessageEvent(msg, channelWatcher)
+  manageMessageEvent(msg, client, channelWatcher)
     .catch((e: Error) => console.error(e.stack))
 })
 
-client.on('interaction', (cmd) => {
+client.on('interactionCreate', (cmd) => {
   if (cmd.isCommand()) {
     matchSlashCommand(cmd, client, channelWatcher)
       .catch((e: Error) => console.error(e.stack))

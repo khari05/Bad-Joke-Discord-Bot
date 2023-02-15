@@ -9,7 +9,7 @@ This bot collects only information it needs to because I cannot afford to store 
 
 Bad Joke only collects unique channel identifiers from watched channels. This information looks like a random number (e.g. 755147843538255945) and the only information available from this number is the date in which the channel was created.
 
-Bad Joke also receives messages. However, it will immediately throw out any message that is not sent to a watched channel. Then, it will discard any message information from the computer memory after replying. It is very unlikely for a malicious actor to take control of the bot because it runs as an unprivileged user that can only edit its database.
+Bad Joke also receives messages if you grant the permission when adding the application. However, it will immediately throw out any message that is not sent to a watched channel. Then, it will discard any message information from the computer memory after replying. It is very unlikely for a malicious actor to take control of the bot because it runs as an unprivileged user that can only edit its database.
 
 ---
 
